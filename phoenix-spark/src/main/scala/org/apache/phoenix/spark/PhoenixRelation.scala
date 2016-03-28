@@ -40,6 +40,7 @@ case class PhoenixRelation(tableName: String, zkUrl: String)(@transient val sqlC
       tableName,
       requiredColumns,
       Some(buildFilter(filters)),
+      None,
       Some(zkUrl),
       new Configuration()
     ).toDataFrame(sqlContext).rdd
@@ -51,6 +52,7 @@ case class PhoenixRelation(tableName: String, zkUrl: String)(@transient val sqlC
       sqlContext.sparkContext,
       tableName,
       Seq(),
+      None,
       None,
       Some(zkUrl),
       new Configuration()

@@ -31,7 +31,9 @@ import org.apache.spark.sql.types._
 import scala.collection.JavaConverters._
 
 class PhoenixRDD(sc: SparkContext, table: String, columns: Seq[String],
-                 predicate: Option[String] = None, zkUrl: Option[String] = None,
+                 predicate: Option[String] = None,
+                 query: Option[String] = None,
+                 zkUrl: Option[String] = None,
                  @transient conf: Configuration)
   extends RDD[PhoenixRecordWritable](sc, Nil) with Logging {
 
@@ -83,6 +85,11 @@ class PhoenixRDD(sc: SparkContext, table: String, columns: Seq[String],
     if(predicate.isDefined) {
       PhoenixConfigurationUtil.setInputTableConditions(config, predicate.get)
     }
+
+    if(columns.isEmpty && !predicate.isDefined && query.isDefined){
+      PhoenixConfigurationUtil.setInputQuery(config,query.get)
+    }
+
 
     // Override the Zookeeper URL if present. Throw exception if no address given.
     zkUrl match {

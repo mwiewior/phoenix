@@ -29,11 +29,13 @@ class SparkSqlContextFunctions(@transient val sqlContext: SQLContext) extends Se
     property will be used
  */
   def phoenixTableAsDataFrame(table: String, columns: Seq[String],
-                               predicate: Option[String] = None, zkUrl: Option[String] = None,
+                               predicate: Option[String] = None,
+                              query : Option[String] = None,
+                              zkUrl: Option[String] = None,
                                conf: Configuration = new Configuration): DataFrame = {
 
     // Create the PhoenixRDD and convert it to a DataFrame
-    new PhoenixRDD(sqlContext.sparkContext, table, columns, predicate, zkUrl, conf)
+    new PhoenixRDD(sqlContext.sparkContext, table, columns, predicate,query, zkUrl, conf)
       .toDataFrame(sqlContext)
   }
 }
